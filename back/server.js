@@ -4,11 +4,12 @@ var app = express();
 
 require('dotenv').config()
 
-app.get('/', function (req, res) {
-    res.setHeader('Content-Type', "text/html");
-    res.status(200).send('helloword');
+app.get("/", (req, res) => {
+	res.json({ message: "Welcome to Groupomania application." });
 });
 
-app.listen(8080, function () {
-    console.log('Server is listening');
-})
+// set port, listen for requests
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+	console.log(`Server is running on port ${PORT}.`);
+});

@@ -1,23 +1,27 @@
-{
-  "development": {
-    "username": "root",
-    "password": "210519108",
-    "database": "database_development",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "test": {
-    "username": "root",
-    "password": "21051908",
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "root",
-    "password": "21051908",
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  }
-}
+// require('dotenv').config();
+
+// {
+//   "development": {
+//     "username": process.env.USERNAME,
+//     "password": process.env.PASSWORD,
+//     "database": process.env.DATABSE,
+//     "host": process.env.HOST,
+//     "dialect": "mysql"
+//   },
+//   "test": {
+//     "username": process.env.USERNAME,
+//     "password": process.env.PASSWORD,
+//     "database": process.env.DATABSE,
+//     "host": process.env.HOST,
+//     "dialect": "mysql"
+//   },
+//   "production": {
+//     "username": process.env.USERNAME,
+//     "password": process.env.PASSWORD,
+//     "database": process.env.DATABSE,
+//     "host": process.env.HOST,
+//     "dialect": "mysql"
+//   }
+// }
+
+
