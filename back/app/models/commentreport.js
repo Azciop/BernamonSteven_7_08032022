@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       commentReport.belongsTo(models.user, {
-        foreignKey: "userId",
+        foreignKey: "idUser",
         as: "reportComment",
       });
       commentReport.belongsTo(models.comment, {
-        foreignKey: "commentId",
+        foreignKey: "idComment",
         as: "reportedComment",
       });
     }

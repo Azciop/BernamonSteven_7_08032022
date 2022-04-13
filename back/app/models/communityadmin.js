@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         as: "communityAdmin",
       });
       communityAdmin.belongsTo(models.community, {
-        foreignKey: "communityId",
+        foreignKey: "idCommunity",
         as: "community",
       });
     }

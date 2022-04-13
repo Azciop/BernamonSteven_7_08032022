@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         as: "comment",
       });
       post.hasMany(models.likePost, {
-        foreignKey: "postId",
+        foreignKey: "idPost",
         as: "likePost",
       });
     }
