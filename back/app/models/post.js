@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   post.init({
     idPost: DataTypes.INTEGER,
-    likePost: DataTypes.STRING,
+    LikePost: DataTypes.STRING,
     idUser: DataTypes.INTEGER,
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,

@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   commentReport.init({
     idUser: DataTypes.INTEGER,
-    reportComment: DataTypes.STRING
+    ReportComment: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'commentReport',

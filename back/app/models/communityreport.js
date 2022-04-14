@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   communityReport.init({
     idUser: DataTypes.INTEGER,
-    reportCommunity: DataTypes.INTEGER
+    ReportCommunity: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'communityreport',

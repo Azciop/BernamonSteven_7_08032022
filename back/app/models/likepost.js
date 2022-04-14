@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "idComment",
         as: "post",
       });
-      likeComment.belongsTo(models.user, {
+      likePost.belongsTo(models.user, {
         foreignKey: "idUser",
         as: "user",
       });

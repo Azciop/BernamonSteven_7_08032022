@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   postReport.init({
     idUser: DataTypes.INTEGER,
-    reportPost: DataTypes.INTEGER
+    ReportPost: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'postreport',
