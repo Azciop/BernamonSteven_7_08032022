@@ -1,31 +1,17 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class commentReport extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      commentReport.belongsTo(models.user, {
-        foreignKey: "idUser",
-        as: "reportComment",
-      });
-      commentReport.belongsTo(models.comment, {
-        foreignKey: "idComment",
+  const commentReport = sequelize.define("commentReport", {
+    commentReport: DataTypes.STRING,
+  })
+  commentReport.associate = (models) => {
+      commentReport.belongsTo(models.User, {
+         foreignKey: "userId",
+         as: "userReportedComment",
+       });
+       commentReport.belongsTo(models.Comment, {
+         foreignKey: "commentId",
         as: "reportedComment",
-      });
-    }
-  }
-  commentReport.init({
-    idUser: DataTypes.INTEGER,
-    ReportComment: DataTypes.STRING,
-  }, {
-    sequelize,
-    modelName: 'commentReport',
-  });
-  return commentReport;
-};
+       });
+  };
+  return commentReport
+}

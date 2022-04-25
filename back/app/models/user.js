@@ -1,76 +1,65 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class user extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      user.hasMany(models.comment, {
-        foreignKey: "idComment",
-        as: "author",
-      });
-      user.hasMany(models.commentreport, {
-        foreignKey: "idUser",
-        as: "reportedComment",
-      });
-      user.hasMany(models.community, { 
-        foreignKey: "idCommunity",
-        as: "community" ,
-      });
-      user.hasMany(models.communityreport, {
-        foreignKey: "idUser",
-        as: "reportedCommunity",
-      });
-      user.hasMany(models.likecomment, {
-        foreignKey: "likeId",
-        as: "likeComment",
-      });
-      user.hasMany(models.likepost, {
-        foreignKey: "likeId",
-        as: "likePost",
-      });
-      user.hasMany(models.post, {
-        foreignKey: "idPost",
-        as: "creator",
-      });
-      user.hasMany(models.postreport, {
-        foreignKey: "idUser",
-        as: "reportedPost",
-      });
-      user.belongsTo(models.user, {
-        foreignKey: "idUser",
-        as: "user",
-      });
-      user.belongsTo(models.post, {
-        foreignKey: "idPost",
-        as: "post",
-      });
-      user.hasMany(models.userreport, {
-        foreignKey: "idUser",
-        as: "reportedUser",
-      });
-      user.hasMany(models.comment, {
-        foreignKey: "idComment",
-        as: "reply",
-      });
-    }
-  }
-  user.init({
-    idUser: DataTypes.INTEGER,
+  const User = sequelize.define("User", {
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
+    username: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     profilPicture: DataTypes.STRING,
     isAdmin: DataTypes.BOOLEAN
-  }, {
-    sequelize,
-    modelName: 'user',
-  });
-  return user;
-};
+  })
+  User.associate = (models) => {
+    User.hasMany(models.Comment, {
+      foreignKey: "commentId",
+      as: "comments",
+    });
+     User.hasMany(models.commentReport, {
+       foreignKey: "userId",
+       as: "reportedComment",
+     });
+     User.hasMany(models.Community, {
+       foreignKey: "communityId",
+       as: "community",
+     });
+     User.hasMany(models.communityReport, {
+       foreignKey: "userId",
+       as: "reportedCommunity",
+     });
+     User.hasMany(models.likeComment, {
+       foreignKey: "likeId",
+       as: "likeComment",
+     });
+     User.hasMany(models.likePost, {
+       foreignKey: "likeId",
+       as: "likePost",
+     });
+     User.hasMany(models.Post, {
+       foreignKey: "postId",
+       as: "creator",
+     });
+     User.hasMany(models.postReport, {
+       foreignKey: "userId",
+       as: "reportedPost",
+     });
+     User.belongsTo(models.User, {
+       foreignKey: "userId",
+       as: "user",
+     });
+     User.hasMany(models.userReport, {
+       foreignKey: "userId",
+       as: "reportedUser",
+     });
+     User.hasMany(models.Comment, {
+       foreignKey: "commentId",
+       as: "reply",
+     });
+     User.hasMany(models.Notification, {
+       foreignKey: "notificationId",
+      as: "notifications",
+    });
+  }
+  return User
+}
+
+

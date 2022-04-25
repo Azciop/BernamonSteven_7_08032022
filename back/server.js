@@ -11,7 +11,7 @@ app.get("/", (req, res) => {
 	res.json({ message: "Welcome to Groupomania application." });
 });
 
-db.sequelize.sync({ force: false }).then(() => {
+db.sequelize.sync({ force: true }).then(() => {
 	console.log("Drop and re-sync db.");
 });
 const server = http.createServer(app);

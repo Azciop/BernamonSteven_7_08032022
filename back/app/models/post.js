@@ -1,44 +1,30 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class post extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      post.belongsTo(models.user, {
-        foreignKey: "idUser",
-        as: "creator",
-      });
-      post.belongsTo(models.community, {
-        foreignKey: "idCommunity",
-        as: "category",
-      });
-      post.hasMany(models.comment, {
-        foreignKey: "idComment",
-        as: "comment",
-      });
-      post.hasMany(models.likePost, {
-        foreignKey: "idPost",
-        as: "likePost",
-      });
-    }
-  }
-  post.init({
-    idPost: DataTypes.INTEGER,
+  const Post = sequelize.define("Post", {
+    postId: DataTypes.INTEGER,
     LikePost: DataTypes.STRING,
-    idUser: DataTypes.INTEGER,
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
-    profilPicture: DataTypes.STRING,
-    postText: DataTypes.TEXT
-  }, {
-    sequelize,
-    modelName: 'post',
-  });
-  return post;
-};
+    username: DataTypes.STRING,
+    profilPicture: DataTypes.STRING
+  })
+  Post.associate = (models) => {
+    Post.belongsTo(models.User, {
+         foreignKey: "userId",
+         as: "creator",
+       });
+       Post.belongsTo(models.Community, {
+         foreignKey: "communityId",
+         as: "category",
+       });
+       Post.hasMany(models.Comment, {
+         foreignKey: "commentId",
+         as: "comment",
+       });
+       Post.hasMany(models.likePost, {
+         foreignKey: "postId",
+         as: "likePost",
+       });
+  };
+  return Post
+}
