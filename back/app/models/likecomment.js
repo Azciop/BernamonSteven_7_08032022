@@ -1,7 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const likeComment = sequelize.define("likeComment", {
-    likeId: DataTypes.INTEGER,
     like: DataTypes.INTEGER
   })
   likeComment.associate = (models) => {
@@ -13,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
          foreignKey: "userId",
          as: "user",
        });
+       
   };
   return likeComment
 }

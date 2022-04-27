@@ -1,8 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const likePost = sequelize.define("likePost", {
-    postId: DataTypes.INTEGER,
-    likePost: DataTypes.STRING
+    like: DataTypes.STRING
   })
   likePost.associate = (models) => {
      likePost.belongsTo(models.Post, {
@@ -13,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
          foreignKey: "userId",
          as: "user",
        });
+       
   };
   return likePost
 }

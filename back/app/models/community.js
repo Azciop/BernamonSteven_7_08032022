@@ -1,21 +1,20 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Community = sequelize.define("Community", {
-    communityId: DataTypes.INTEGER,
-    moderatorId: DataTypes.INTEGER,
-    communityName: DataTypes.STRING,
-    communityPicture: DataTypes.STRING,
-    communityFollowers: DataTypes.STRING
+    name: DataTypes.STRING,
+    picture: DataTypes.STRING,
+    followers: DataTypes.STRING
   })
   Community.associate = (models) => {
-    Community.hasMany(models.Community, {
-         as: "community",
-         targetKey:"idCommunity"
-       });
-       Community.belongsTo(models.User, { 
-         foreignKey: "idUser", 
-        as: "communityModerator" 
-      });
+    Community.belongsTo(models.User, {
+      foreignKey: "userId",
+      as: "moderator"
+    });
+    Community.belongsToMany(models.User, {
+      through: "followers",
+      as: "users",
+      foreignKey: "communityId"
+    });
   };
   return Community
 }

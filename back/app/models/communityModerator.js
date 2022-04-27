@@ -1,8 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const communityModerator = sequelize.define("communityModerator", {
-    moderatorId: DataTypes.INTEGER,
-    communityModerators: DataTypes.STRING
+    isModerator: DataTypes.BOOLEAN
   })
   communityModerator.associate = (models) => {
     communityModerator.belongsTo(models.User, {
