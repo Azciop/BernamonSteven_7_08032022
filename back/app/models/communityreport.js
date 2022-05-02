@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const communityReport = sequelize.define("communityReport", {
-    reportCommunity: DataTypes.INTEGER
+    report: DataTypes.INTEGER
   })
   communityReport.associate = (models) => {
     communityReport.belongsTo(models.User, {
@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       as: "userReportedCommunity",
     });
        communityReport.belongsTo(models.Community, {
-         foreignKey: "commentId",
+         foreignKey: "communityId",
          as: "reportedComment",
        });
   };

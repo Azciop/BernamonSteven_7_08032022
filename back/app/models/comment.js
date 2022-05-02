@@ -14,14 +14,13 @@ module.exports = (sequelize, DataTypes) => {
       as: "post",
     });
     Comment.hasMany(models.commentReply, {
-      foreignKey: "commentId",
-      as: "commentReplies",
+      foreignKey: "commentReplyId",
+      as: "commentReply"
     });
-    Comment.belongsToMany(models.User, {
-      through: "likers",
-      as: "users",
-      foreignKey: "likeId"
-    });
+    Comment.hasMany(models.likeComment, {
+      foreignKey: "likeCommentId",
+      as: "commentLike"
+    })
   };
   return Comment
 }

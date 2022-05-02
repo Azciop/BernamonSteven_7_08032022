@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const privateMessage = sequelize.define("privateMessage", {
-    priveMessageId: DataTypes.INTEGER
+    message: DataTypes.TEXT
   })
   privateMessage.associate = (models) => {
     privateMessage.belongsTo(models.User, {

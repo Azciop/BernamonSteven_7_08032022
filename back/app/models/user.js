@@ -14,37 +14,41 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "commentId",
       as: "comments",
     });
+    User.hasMany(models.commentReply, {
+      as: "replyComment",
+      foreignKey: "reply"
+    });
     User.hasMany(models.commentReport, {
       foreignKey: "userId",
       as: "reportedComment",
     });
+
     User.belongsToMany(models.Community, {
       through: "followers",
       as: "communities",
       foreignKey: "userId"
-    })
+    });
+    User.hasMany(models.communityModerator, {
+      as: "communityModerator",
+      foreignKey: "ModeratorId"
+    });
     User.hasMany(models.communityReport, {
       foreignKey: "userId",
       as: "reportedCommunity",
     });
-    User.hasMany(models.communityModerator, {
-      as: "communityModerator",
-      foreignKey: "moderatorId"
-    });
-    User.belongsToMany(models.Comment, {
-      through: "likers",
-      as: "commentLikes",
-      foreignKey: "likeId"
-    });
-    User.belongsToMany(models.commentReply, {
-      through: "replyLikers",
-      as: "replyLikes",
-      foreignKey: "replyLikeId"
-    });
+
     User.hasMany(models.likePost, {
       foreignKey: "likeId",
       as: "likePost",
     });
+    User.hasMany(models.likeComment, {
+      foreignKey: "likeCommentId",
+      as: "likeComment",
+    });
+    User.hasMany(models.Notification, {
+      as: "notifications",
+    });
+
     User.hasMany(models.Post, {
       foreignKey: "postId",
       as: "creator",
@@ -61,15 +65,9 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId",
       as: "reportedUser",
     });
-    User.hasMany(models.Comment, {
-      foreignKey: "commentId",
-      as: "reply",
-    });
-    User.hasMany(models.Notification, {
-      foreignKey: "notificationId",
-      as: "notifications",
-    });
   }
+
+
   return User
 }
 
