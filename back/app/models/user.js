@@ -6,67 +6,87 @@ module.exports = (sequelize, DataTypes) => {
     username: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
-    profilPicture: DataTypes.STRING,
+    avatar: DataTypes.STRING,
     isAdmin: DataTypes.BOOLEAN
   })
   User.associate = (models) => {
     User.hasMany(models.Comment, {
-      foreignKey: "commentId",
-      as: "comments",
+      as: "commentAuthor",
+      foreignKey: "commentAuthorId"
     });
     User.hasMany(models.commentReply, {
-      as: "replyComment",
-      foreignKey: "reply"
+      // as: "userCommentReply",
+      // foreignKey: "replyAuthorId"
+    });
+    User.hasMany(models.Post, {
+      as: "postAuthor",
+      //foreignKey: "authorId"
     });
     User.hasMany(models.commentReport, {
-      foreignKey: "userId",
-      as: "reportedComment",
+      as: "fromCommentUser",
+      foreignKey: "userFromId"
     });
-
+    User.hasMany(models.commentReport, {
+      as: "toCommentUser",
+      foreignKey: "userToId"
+    });
+    User.belongsToMany(models.Community, {
+      through: "moderators",
+      as: "communityModerator"
+    });
     User.belongsToMany(models.Community, {
       through: "followers",
-      as: "communities",
-      foreignKey: "userId"
-    });
-    User.hasMany(models.communityModerator, {
-      as: "communityModerator",
-      foreignKey: "ModeratorId"
+      as: "communityFollower"
     });
     User.hasMany(models.communityReport, {
-      foreignKey: "userId",
-      as: "reportedCommunity",
+      as: "FromCommunityUser",
+      foreignKey: "userFromId"
     });
-
-    User.hasMany(models.likePost, {
-      foreignKey: "likeId",
-      as: "likePost",
+    User.hasMany(models.communityReport, {
+      as: "toCommunityUser",
+      foreignKey: "userToId"
     });
     User.hasMany(models.likeComment, {
-      foreignKey: "likeCommentId",
-      as: "likeComment",
+      //as: "UserLikeComments"
+    });
+    User.hasMany(models.likePost, {
+      //as: "UserLikePosts"
+    });
+    User.hasMany(models.likeReply, {
+      //as: "UserLikeReplies"
     });
     User.hasMany(models.Notification, {
-      as: "notifications",
+      as: "notifications"
     });
-
     User.hasMany(models.Post, {
-      foreignKey: "postId",
-      as: "creator",
+      as: "postAuthor"
     });
     User.hasMany(models.postReport, {
-      foreignKey: "userId",
-      as: "reportedPost",
+      as: "FromPostUser",
+      foreignKey: "userFromId"
     });
-    User.belongsTo(models.User, {
-      foreignKey: "userId",
-      as: "user",
+    User.hasMany(models.postReport, {
+      as: "toPostUser",
+      foreignKey: "userToId"
+    });
+    User.hasMany(models.privateMessage, {
+      as: "messageAuthor"
+    });
+    User.hasMany(models.privateMessage, {
+      as: "messageReceiver"
     });
     User.hasMany(models.userReport, {
-      foreignKey: "userId",
-      as: "reportedUser",
+      as: "fromUser",
+      foreignKey: "userFromId"
     });
-  }
+    User.hasMany(models.userReport, {
+      as: "toUser",
+      foreignKey: "userToId"
+    });
 
+
+
+  }
 
   return User
 }

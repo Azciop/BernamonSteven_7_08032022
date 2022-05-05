@@ -5,22 +5,20 @@ module.exports = (sequelize, DataTypes) => {
     likes: DataTypes.INTEGER
   })
   Comment.associate = (models) => {
-    Comment.belongsTo(models.User, {
-      foreignKey: "userId",
-      as: "author",
-    });
     Comment.belongsTo(models.Post, {
-      foreignKey: "postId",
-      as: "post",
+      as: "postComments"
+    });
+    Comment.belongsTo(models.User, {
+      as: "commentAuthor"
     });
     Comment.hasMany(models.commentReply, {
-      foreignKey: "commentReplyId",
-      as: "commentReply"
+      // as: "postCommentReply",
+      foreignKey: "commentReplyId"
     });
     Comment.hasMany(models.likeComment, {
-      foreignKey: "likeCommentId",
-      as: "commentLike"
-    })
+      as: "likeComments",
+      // foreignKey: "commentLikeId"
+    });
   };
   return Comment
 }

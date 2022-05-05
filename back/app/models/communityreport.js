@@ -5,13 +5,13 @@ module.exports = (sequelize, DataTypes) => {
   })
   communityReport.associate = (models) => {
     communityReport.belongsTo(models.User, {
-      foreignKey: "userId",
-      as: "userReportedCommunity",
+      as: "toCommunityUser",
+      foreignKey: "userFromId"
     });
-       communityReport.belongsTo(models.Community, {
-         foreignKey: "communityId",
-         as: "reportedComment",
-       });
+    communityReport.belongsTo(models.User, {
+      as: "fromCommunityUser",
+      foreignKey: "userToId"
+    });
   };
   return communityReport
 }

@@ -6,14 +6,16 @@ module.exports = (sequelize, DataTypes) => {
   })
   Community.associate = (models) => {
     Community.belongsToMany(models.User, {
+      through: "moderators",
+      as: "communityModerator"
+    });
+    Community.belongsToMany(models.User, {
       through: "followers",
-      as: "users",
-      foreignKey: "communityId"
+      as: "communityFollower"
     });
     Community.hasMany(models.Post, {
-      as: "community",
-      foreignKey: "communityId",
-
+      as: "post",
+      foreignKey: "postId"
     });
   };
   return Community

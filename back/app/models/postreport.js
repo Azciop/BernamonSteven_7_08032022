@@ -5,12 +5,13 @@ module.exports = (sequelize, DataTypes) => {
   })
   postReport.associate = (models) => {
     postReport.belongsTo(models.User, {
-      foreignKey: "userId",
-      as: "userReportedPost",
+      as: "toPostUser",
+      foreignKey: "userFromId"
     });
-       postReport.belongsTo(models.Post, {
-       as: "reportedPost",
-       });
+    postReport.belongsTo(models.User, {
+      as: "fromPostUser",
+      foreignKey: "userToId"
+    });
   };
   return postReport
 }

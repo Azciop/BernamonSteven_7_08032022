@@ -4,14 +4,14 @@ module.exports = (sequelize, DataTypes) => {
     report: DataTypes.STRING,
   })
   commentReport.associate = (models) => {
-      commentReport.belongsTo(models.User, {
-         foreignKey: "userId",
-         as: "userReportedComment",
-       });
-       commentReport.belongsTo(models.Comment, {
-         foreignKey: "commentId",
-        as: "reportedComment",
-       });
+    commentReport.belongsTo(models.User, {
+      as: "toCommentUser",
+      foreignKey: "userFromId"
+    });
+    commentReport.belongsTo(models.User, {
+      as: "fromCommentUser",
+      foreignKey: "userToId"
+    });
   };
   return commentReport
 }

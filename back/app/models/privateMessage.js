@@ -5,13 +5,11 @@ module.exports = (sequelize, DataTypes) => {
   })
   privateMessage.associate = (models) => {
     privateMessage.belongsTo(models.User, {
-         foreignKey: "fromUserId",
-         as: "privateMessageFromUserId",
-       });
-       privateMessage.belongsTo(models.User, {
-         foreignKey: "toUserId",
-       as: "privateMessageToUserId",
-       });
+      as: "messageAuthor"
+    });
+    privateMessage.belongsTo(models.User, {
+      as: "messageReceiver"
+    });
   };
   return privateMessage
 }
