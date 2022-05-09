@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       as: "communityFollower"
     });
     Community.hasMany(models.Post, {
-      as: "post",
-      foreignKey: "postId"
+      as: "community",
+      foreignKey: "communityId"
     });
   };
   return Community

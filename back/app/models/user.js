@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
   })
   User.associate = (models) => {
     User.hasMany(models.Comment, {
-      as: "commentAuthor",
-      foreignKey: "commentAuthorId"
+      as: "user",
+      foreignKey: "userId"
     });
     User.hasMany(models.commentReply, {
       // as: "userCommentReply",
@@ -55,7 +55,8 @@ module.exports = (sequelize, DataTypes) => {
       as: "notifications"
     });
     User.hasMany(models.Post, {
-      as: "postAuthor"
+       as: "author",      
+       foreignKey: "authorId"
     });
     User.hasMany(models.postReport, {
       as: "FromPostUser",

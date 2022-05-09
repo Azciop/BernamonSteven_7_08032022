@@ -2,24 +2,24 @@
 module.exports = (sequelize, DataTypes) => {
   const Post = sequelize.define("Post", {
     content: DataTypes.TEXT,
-    contentImage: DataTypes.STRING
+    image: DataTypes.STRING
   })
   Post.associate = (models) => {
     Post.belongsTo(models.User, {
-      as: "postAuthor"
+        as: "author"
     });
     Post.hasMany(models.Comment, {
       as: "commentParent"
     });
     Post.belongsTo(models.Community, {
-      as: "post"
+      as: "community"
     });
     Post.hasMany(models.likePost, {
       as: "likePosts",
     });
     Post.hasMany(models.Comment, {
-      as: "postComments",
-      foreignKey: "postCommentsId"
+      as: "post",
+      foreignKey: "postId"
     });
 
   };

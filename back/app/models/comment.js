@@ -2,14 +2,13 @@
 module.exports = (sequelize, DataTypes) => {
   const Comment = sequelize.define("Comment", {
     comment: DataTypes.TEXT,
-    likes: DataTypes.INTEGER
   })
   Comment.associate = (models) => {
     Comment.belongsTo(models.Post, {
-      as: "postComments"
+      as: "post"
     });
     Comment.belongsTo(models.User, {
-      as: "commentAuthor"
+      as: "user"
     });
     Comment.hasMany(models.commentReply, {
       // as: "postCommentReply",
