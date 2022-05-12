@@ -2,7 +2,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const userReport = sequelize.define("userReport", {
-    message: DataTypes.STRING
+    message: DataTypes.TEXT
   })
   userReport.associate = (models) => {
     userReport.belongsTo(models.User, {
@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       as: "fromUser",
       foreignKey: "userToId"
     });
-
   };
   return userReport
 }

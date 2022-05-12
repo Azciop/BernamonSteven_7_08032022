@@ -1,18 +1,18 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const commentReply = sequelize.define("commentReply", {
-    reply: DataTypes.TEXT,
+    content: DataTypes.TEXT,
   })
   commentReply.associate = (models) => {
     commentReply.belongsTo(models.Comment, {
-      // as: "postCommentReply"
+       as: "comment"
     });
     commentReply.belongsTo(models.User, {
-      // as: "userCommentReply"
+       as: "user"
     });
     commentReply.hasMany(models.likeReply, {
-      as: "likeReplies",
-      //foreignKey: "replyLikeId"
+      as: "likeReply",
+     foreignKey: "replyId"
     });
   }
   return commentReply

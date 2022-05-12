@@ -1,16 +1,16 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const commentReport = sequelize.define("commentReport", {
-    report: DataTypes.STRING,
+    content: DataTypes.TEXT,
   })
   commentReport.associate = (models) => {
     commentReport.belongsTo(models.User, {
-      as: "toCommentUser",
-      foreignKey: "userFromId"
+      as: "userTo",
+      foreignKey: "userToId"
     });
     commentReport.belongsTo(models.User, {
-      as: "fromCommentUser",
-      foreignKey: "userToId"
+      as: "userFrom",
+      foreignKey: "userFromId"
     });
   };
   return commentReport

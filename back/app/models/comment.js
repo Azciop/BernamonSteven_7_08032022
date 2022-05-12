@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Comment = sequelize.define("Comment", {
-    comment: DataTypes.TEXT,
+    content: DataTypes.TEXT,
   })
   Comment.associate = (models) => {
     Comment.belongsTo(models.Post, {
@@ -11,13 +11,13 @@ module.exports = (sequelize, DataTypes) => {
       as: "user"
     });
     Comment.hasMany(models.commentReply, {
-      // as: "postCommentReply",
-      foreignKey: "commentReplyId"
+       as: "commentReply",
+      foreignKey: "commentId"
     });
     Comment.hasMany(models.likeComment, {
-      as: "likeComments",
-      // foreignKey: "commentLikeId"
-    });
+       as: "likeComment",
+      foreignKey: "commentId"
+     });
   };
   return Comment
 }

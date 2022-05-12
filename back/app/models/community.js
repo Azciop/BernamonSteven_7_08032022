@@ -13,8 +13,16 @@ module.exports = (sequelize, DataTypes) => {
       through: "followers",
       as: "communityFollower"
     });
+    Community.belongsTo(models.User, {
+      as: "user",
+      foreignKey: "creatorId"
+    });
     Community.hasMany(models.Post, {
       as: "community",
+      foreignKey: "communityId"
+    });
+    Community.hasMany(models.communityReport, {
+      as: "communityReport",
       foreignKey: "communityId"
     });
   };

@@ -1,16 +1,16 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const communityReport = sequelize.define("communityReport", {
-    report: DataTypes.INTEGER
+    content: DataTypes.TEXT
   })
   communityReport.associate = (models) => {
     communityReport.belongsTo(models.User, {
-      as: "toCommunityUser",
-      foreignKey: "userFromId"
+      as: "user",
+      foreignKey: "userId"
     });
-    communityReport.belongsTo(models.User, {
-      as: "fromCommunityUser",
-      foreignKey: "userToId"
+    communityReport.belongsTo(models.Community, {
+      as: "community",
+      foreignKey: "communityId"
     });
   };
   return communityReport

@@ -1,15 +1,15 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const likeComment = sequelize.define("likeComment", {
-
+    content: DataTypes.TEXT,
   })
   likeComment.associate = (models) => {
     likeComment.belongsTo(models.Comment, {
-      as: "likeComments"
+      as: "comment"
     });
     likeComment.belongsTo(models.User, {
-      // as: "UserLikeComments"
+       as: "user"
     });
   };
   return likeComment
-}
+} 

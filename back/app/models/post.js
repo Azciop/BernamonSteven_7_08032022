@@ -8,20 +8,17 @@ module.exports = (sequelize, DataTypes) => {
     Post.belongsTo(models.User, {
         as: "author"
     });
-    Post.hasMany(models.Comment, {
-      as: "commentParent"
-    });
     Post.belongsTo(models.Community, {
       as: "community"
     });
     Post.hasMany(models.likePost, {
-      as: "likePosts",
+      as: "likePost",
+      foreignKey: "postId"
     });
     Post.hasMany(models.Comment, {
       as: "post",
       foreignKey: "postId"
     });
-
   };
   return Post
 }

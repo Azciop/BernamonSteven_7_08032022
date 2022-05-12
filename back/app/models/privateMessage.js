@@ -1,15 +1,18 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const privateMessage = sequelize.define("privateMessage", {
-    message: DataTypes.TEXT
+   content: DataTypes.TEXT
   })
   privateMessage.associate = (models) => {
     privateMessage.belongsTo(models.User, {
-      as: "messageAuthor"
+      as: "messageAuthor",
+      foreignKey: "authorId"
     });
     privateMessage.belongsTo(models.User, {
-      as: "messageReceiver"
+      as: "messageReceiver",
+      foreignKey: "receiverId"
     });
   };
   return privateMessage
 }
+

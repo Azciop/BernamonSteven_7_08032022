@@ -11,52 +11,56 @@ module.exports = (sequelize, DataTypes) => {
   })
   User.associate = (models) => {
     User.hasMany(models.Comment, {
-      as: "user",
+      as: "comment",
       foreignKey: "userId"
     });
     User.hasMany(models.commentReply, {
-      // as: "userCommentReply",
-      // foreignKey: "replyAuthorId"
+      as: "commentReply",
+      foreignKey: "userId"
     });
     User.hasMany(models.commentReport, {
-      as: "fromCommentUser",
-      foreignKey: "userFromId"
-    });
-    User.hasMany(models.commentReport, {
-      as: "toCommentUser",
+      as: "commentReportTo",
       foreignKey: "userToId"
+    });
+    User.hasMany(models.commentReport, {
+      as: "commentReportFrom",
+      foreignKey: "userFromId"
     });
     User.belongsToMany(models.Community, {
       through: "moderators",
       as: "communityModerator"
+    });
+    User.hasMany(models.Community, {
+      as: 'community',
+      foreignKey: "creatorId"
     });
     User.belongsToMany(models.Community, {
       through: "followers",
       as: "communityFollower"
     });
     User.hasMany(models.communityReport, {
-      as: "FromCommunityUser",
-      foreignKey: "userFromId"
-    });
-    User.hasMany(models.communityReport, {
-      as: "toCommunityUser",
-      foreignKey: "userToId"
+      as: "communityReport",
+      foreignKey: "userId"
     });
     User.hasMany(models.likeComment, {
-      //as: "UserLikeComments"
+      as: "likeComment",
+      foreignKey: "userId"
     });
     User.hasMany(models.likePost, {
-      //as: "UserLikePosts"
+      as: "likePost",
+      foreignKey: "userId"
     });
     User.hasMany(models.likeReply, {
-      //as: "UserLikeReplies"
+      as: "likeReply",
+      foreignKey: "userId"
     });
     User.hasMany(models.Notification, {
-      as: "notifications"
+      as: "notification",
+      foreignKey: "userId"
     });
     User.hasMany(models.Post, {
-       as: "author",      
-       foreignKey: "authorId"
+      as: "post",
+      foreignKey: "authorId"
     });
     User.hasMany(models.postReport, {
       as: "FromPostUser",
@@ -67,10 +71,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userToId"
     });
     User.hasMany(models.privateMessage, {
-      as: "messageAuthor"
+      as: "messageAuthor",
+      foreignKey: "authorId"
     });
     User.hasMany(models.privateMessage, {
-      as: "messageReceiver"
+      as: "messageReceiver",
+      foreignKey: "receiverId"
     });
     User.hasMany(models.userReport, {
       as: "fromUser",
@@ -80,12 +86,6 @@ module.exports = (sequelize, DataTypes) => {
       as: "toUser",
       foreignKey: "userToId"
     });
-
-
-
   }
-
   return User
 }
-
-
