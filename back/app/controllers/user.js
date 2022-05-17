@@ -154,7 +154,7 @@ exports.updateUser = (req, res, next) => {
 						{ ...userObject, _id: req.params.id }
 					)
 						// then we send the message
-						.then(user =>
+						.then(user => 
 							res
 								.status(200)
 								.json(
@@ -179,9 +179,9 @@ exports.updateUser = (req, res, next) => {
 								hateoasLinks(req, user._id)
 							)
 					)
-					.catch(error => res.status(400).json({ error }));
-			}
-		})
+						.catch(error => res.status(400).json({ error }));
+				}
+			})
 		.catch(error => res.status(500).json({ error }));
 };
 
