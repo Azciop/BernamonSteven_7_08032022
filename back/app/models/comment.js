@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
        as: "likeComment",
       foreignKey: "commentId"
      });
+     Comment.hasMany(models.commentReport, {
+       as: "commentReport",
+       foreignKey: "commentId"
+     })
   };
   return Comment
 }

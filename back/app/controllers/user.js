@@ -5,27 +5,14 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 // Importing the models
-const User = require("../models/user");
+const { User } = require("../models");
 
 // importing the dotenv file
-const dotenv = require("dotenv");
-const result = dotenv.config();
 require("dotenv").config();
 
 const CryptoJS = require("crypto-js");
 
 const fs = require("fs");
-
-// Importing express
-var express = require("express");
-var app = express();
-
-// Importing hateoas module
-var hateoasLinker = require("express-hateoas-links");
-const user = require("../models/user");
-
-// replace standard express res.json with the new version
-app.use(hateoasLinker);
 
 // Making a function to encrypt the email
 function encryptEmail(email) {
@@ -71,25 +58,24 @@ exports.signup = (req, res, next) => {
 		.then(hash => {
 			// we get the encrypted email and we creat the user object
 			const emailEncrypted = encryptEmail(req.body.email);
-			const user = new User({
+			const userObject = {
+				...req.body,
 				email: emailEncrypted,
 				password: hash,
-				firstName: req.body.firstName,
-				lastName: req.body.lastName,
-			});
-			user
-				.save()
-				.then(result => {
+			};
+			User
+				.create(userObject)
+				.then(newUser => {
 					// we get the email to send it to the hateoas
-					result.email = req.body.email;
+					console.log(newUser.email)
+					// newUser.email = decryptEmail(newUser.email);
 					res
 						.status(201)
 						.json(
-							{ message: " User Created !", data: result },
-							hateoasLinks(req, result._id)
+							newUser, hateoasLinks(req, newUser._id)
 						);
 				})
-				.catch(error => res.status(400).json({ error }));
+				.catch(error => console.log(error));
 		})
 		.catch(error => res.status(500).json(console.log(error)));
 };
@@ -113,7 +99,7 @@ exports.login = (req, res, next) => {
 					}
 					res.status(200).json(
 						{
-							// if passwords matches, creat random secret token for a duration of 24h, and log in
+							// if passwords matches, create random secret token for a duration of 24h, and log in
 							idUser: user._id,
 							token: jwt.sign({ idUser: user._id }, "RANDOM_TOKEN_SECRET", {
 								expiresIn: "24h",
@@ -128,62 +114,8 @@ exports.login = (req, res, next) => {
 };
 
 // we make a function to update an user
-exports.updateUser = (req, res, next) => {
-	// Using the findOne method to find the user
-	user
-		.findOne({ _id: req.params.id })
-		.then(user => {
-			if (req.auth.idUser !== user.idUser) {
-				return res
-					.status(403)
-					.json({ message: "Access denied. You can't change someone else infos" });
-			}
-			// we make a const to find the image we want to delete in case of a image change
-			const filename = user.profilPicture.split("/images/")[1];
-			if (req.file) {
-				// we make a object that contains the new values and the new image
-				const userObject = {
-					...JSON.parse(req.body.user),
-					profilPicture: `/images/${req.file.filename}`,
-				};
-				// We use the unlink method to delete the old image
-				fs.unlink(`images/${filename}`, () => {
-					// using the updateOne function to update the values if the image has been modified
-					user.updateOne(
-						{ _id: req.params.id },
-						{ ...userObject, _id: req.params.id }
-					)
-						// then we send the message
-						.then(user => 
-							res
-								.status(200)
-								.json(
-									{ message: "Your user has been modified", data: user },
-									hateoasLinks(req, user._id)
-								)
-						)
-						.catch(error => res.status(400).json({ error }));
-				});
-			} else {
-				// else, we just update the new values without changing the image
-				user.updateOne(
-					{ _id: req.params.id },
-					{ ...req.body, _id: req.params.id }
-				)
-					// then, we send the message
-					.then(user =>
-						res
-							.status(200)
-							.json(
-								{ message: "Your user has been modified", data: user },
-								hateoasLinks(req, user._id)
-							)
-					)
-						.catch(error => res.status(400).json({ error }));
-				}
-			})
-		.catch(error => res.status(500).json({ error }));
-};
+exports.updateUser = (req, res, next) => 
+	
 
 // HATEOAS Links
 

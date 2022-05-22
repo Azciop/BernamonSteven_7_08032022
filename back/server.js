@@ -1,22 +1,40 @@
-const http = require('http');
 var express = require('express');
+var path = require('path');
 
 var app = express();
 
 require('dotenv').config();
 
+const router = require("./app/routes/index");
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+var cors = require('cors');
+
+var corsOptions = {
+  origin: process.env.ENDPOINT,
+};
+
+app.use(cors(corsOptions));
+
+app.use("/images/", express.static(path.join(__dirname, "images")));
+
+// importing the hateoas module
+var hateoasLinker = require("express-hateoas-links");
+
+app.use(hateoasLinker);
+
+app.use("/api", router);
+
 const db = require('./app/models/');
 
-app.get("/", (req, res) => {
-	res.json({ message: "Welcome to Groupomania application." });
+db.sequelize.sync({ force: true }).then(() => {
+  console.log("Drop and re-sync db.");
 });
 
-db.sequelize.sync({ force: true }).then(() => {
-	console.log("Drop and re-sync db.");
-});
-const server = http.createServer(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-	console.log(`Server is running on port ${PORT}.`);
+  console.log(`Server is running on port ${PORT}.`);
 });

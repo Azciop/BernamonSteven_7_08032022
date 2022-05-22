@@ -5,12 +5,12 @@ module.exports = (sequelize, DataTypes) => {
   })
   commentReport.associate = (models) => {
     commentReport.belongsTo(models.User, {
-      as: "userTo",
-      foreignKey: "userToId"
+      as: "user",
+      foreignKey: "userId"
     });
-    commentReport.belongsTo(models.User, {
-      as: "userFrom",
-      foreignKey: "userFromId"
+    commentReport.belongsTo(models.Comment, {
+      as: "comment",
+      foreignKey: "commentId"
     });
   };
   return commentReport

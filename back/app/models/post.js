@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       as: "post",
       foreignKey: "postId"
     });
+    Post.hasMany(models.postReport, {
+      as: "postReport",
+      foreignKey: "postId"
+    })
   };
   return Post
 }

@@ -19,12 +19,8 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId"
     });
     User.hasMany(models.commentReport, {
-      as: "commentReportTo",
-      foreignKey: "userToId"
-    });
-    User.hasMany(models.commentReport, {
-      as: "commentReportFrom",
-      foreignKey: "userFromId"
+      as: "commentReport",
+      foreignKey: "userId"
     });
     User.belongsToMany(models.Community, {
       through: "moderators",
@@ -63,12 +59,8 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "authorId"
     });
     User.hasMany(models.postReport, {
-      as: "FromPostUser",
-      foreignKey: "userFromId"
-    });
-    User.hasMany(models.postReport, {
-      as: "toPostUser",
-      foreignKey: "userToId"
+      as: "postReport",
+      foreignKey: "userId"
     });
     User.hasMany(models.privateMessage, {
       as: "messageAuthor",
