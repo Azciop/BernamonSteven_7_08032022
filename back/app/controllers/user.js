@@ -67,8 +67,8 @@ exports.signup = (req, res, next) => {
 				.create(userObject, {raw:true})
 				.then(newUser => {
 					// we get the email to send it to the hateoas
-					console.log(newUser)
-					// newUser.email = decryptEmail(newUser.email);
+					newUser = newUser.toJSON();
+					newUser.email = decryptEmail(newUser.email);
 					res
 						.status(201)
 						.json(
@@ -85,7 +85,7 @@ exports.login = (req, res, next) => {
 	// we get the encrypted email
 	const emailCryptoJS = encryptEmail(req.body.email);
 	// using findOne to find the user
-	User.findOne({ email: emailCryptoJS })
+	User.findOne({ email: emailCryptoJS, raw:true })
 		.then(user => {
 			if (!user) {
 				return res.status(401).json({ error: " User not found !" });
@@ -100,12 +100,12 @@ exports.login = (req, res, next) => {
 					res.status(200).json(
 						{
 							// if passwords matches, create random secret token for a duration of 24h, and log in
-							idUser: user._id,
-							token: jwt.sign({ idUser: user._id }, "RANDOM_TOKEN_SECRET", {
+							idUser: user.id,
+							token: jwt.sign({ idUser: user.id }, "RANDOM_TOKEN_SECRET", {
 								expiresIn: "24h",
 							}),
 						},
-						hateoasLinks(req, user._id)
+						hateoasLinks(req, user.id)
 					);
 				})
 				.catch(error => res.status(500).json({ error }));
@@ -114,8 +114,25 @@ exports.login = (req, res, next) => {
 };
 
 // we make a function to update an user
-//exports.updateUser = (req, res, next) => 
-	
+exports.updateUser = (req, res, next) => {
+	User.findByPk(req.auth.idUser)
+	.then(user => {
+		console.log(user)
+		// si je renseigne un password alors je le hash et je le met dans req.body.password
+		// si je renseigne un email alors je l'encrypt et je le met dans req.body.email
+		// si j'ai un avatar alors je met son url dans req.body.url
+		// si j'avais deja un avatar et que j'en met un nouveau, je l'unlink pour mettre le nouveau
+		// faire l'update avec le req.body et je renvoie mon nouveau user avec les hateoas
+	})
+}
+
+// deleteUser
+// readUser
+// exportData
+// reportUser
+// readUserByUserName
+
+// include 
 
 // HATEOAS Links
 
