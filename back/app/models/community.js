@@ -1,34 +1,30 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class community extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      community.hasMany(models.community, {
-        as: "community",
-        targetKey:"idCommunity"
-      });
-      community.belongsTo(models.user, { 
-        foreignKey: "idUser", 
-        as: "communityAdmin" 
-      });
-    }
-  }
-  community.init({
-    idCommunity: DataTypes.INTEGER,
-    idAdmin: DataTypes.INTEGER,
-    communityName: DataTypes.STRING,
-    communityPicture: DataTypes.STRING,
-    communityFollowers: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'community',
-  });
-  return community;
-};
+  const Community = sequelize.define("Community", {
+    name: DataTypes.STRING,
+    picture: DataTypes.STRING,
+  })
+  Community.associate = (models) => {
+    Community.belongsToMany(models.User, {
+      through: "moderators",
+      as: "communityModerator"
+    });
+    Community.belongsToMany(models.User, {
+      through: "followers",
+      as: "communityFollower"
+    });
+    Community.belongsTo(models.User, {
+      as: "user",
+      foreignKey: "creatorId"
+    });
+    Community.hasMany(models.Post, {
+      as: "community",
+      foreignKey: "communityId"
+    });
+    Community.hasMany(models.communityReport, {
+      as: "communityReport",
+      foreignKey: "communityId"
+    });
+  };
+  return Community
+}
