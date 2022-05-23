@@ -64,10 +64,10 @@ exports.signup = (req, res, next) => {
 				password: hash,
 			};
 			User
-				.create(userObject)
+				.create(userObject, {raw:true})
 				.then(newUser => {
 					// we get the email to send it to the hateoas
-					console.log(newUser.email)
+					console.log(newUser)
 					// newUser.email = decryptEmail(newUser.email);
 					res
 						.status(201)
@@ -114,7 +114,7 @@ exports.login = (req, res, next) => {
 };
 
 // we make a function to update an user
-exports.updateUser = (req, res, next) => 
+//exports.updateUser = (req, res, next) => 
 	
 
 // HATEOAS Links

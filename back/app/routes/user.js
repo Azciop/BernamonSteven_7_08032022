@@ -18,7 +18,7 @@ router.post("/login", userCtrl.login);
 // router.get("/export", auth, userCtrl.exportUser);
 
 // // we make our route tu update user's info
- router.put("/", auth, multer, userCtrl.updateUser);
+ //router.put("/", auth, multer, userCtrl.updateUser);
 
 // // We make our route to delete an user
 // router.delete("/", auth, userCtrl.deleteUser);
