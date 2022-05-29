@@ -14,14 +14,14 @@ router.post("/login", userCtrl.login);
 // router.post("/report/:id", auth, userCtrl.reportUser);
 
 // // we make our routes to read and export an user data (RGPD rules)
-// router.get("/read", auth, userCtrl.readUser);
-// router.get("/export", auth, userCtrl.exportUser);
+ router.get("/read", auth, userCtrl.readUser);
+ router.get("/export", auth, userCtrl.exportUser);
 
 // // we make our route tu update user's info
  router.put("/", auth, multer, userCtrl.updateUser);
 
 // // We make our route to delete an user
-// router.delete("/", auth, userCtrl.deleteUser);
+ router.delete("/", auth, userCtrl.deleteUser);
 
 // we export our router
 module.exports = router;

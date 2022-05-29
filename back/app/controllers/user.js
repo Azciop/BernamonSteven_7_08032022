@@ -63,17 +63,12 @@ exports.signup = (req, res, next) => {
 				email: emailEncrypted,
 				password: hash,
 			};
-			User
-				.create(userObject, {raw:true})
+			User.create(userObject, { raw: true })
 				.then(newUser => {
 					// we get the email to send it to the hateoas
 					newUser = newUser.toJSON();
 					newUser.email = decryptEmail(newUser.email);
-					res
-						.status(201)
-						.json(
-							newUser, hateoasLinks(req, newUser._id)
-						);
+					res.status(201).json(newUser, hateoasLinks(req, newUser.id));
 				})
 				.catch(error => console.log(error));
 		})
@@ -85,7 +80,7 @@ exports.login = (req, res, next) => {
 	// we get the encrypted email
 	const emailCryptoJS = encryptEmail(req.body.email);
 	// using findOne to find the user
-	User.findOne({ email: emailCryptoJS, raw:true })
+	User.findOne({ email: emailCryptoJS, raw: true })
 		.then(user => {
 			if (!user) {
 				return res.status(401).json({ error: " User not found !" });
@@ -114,25 +109,98 @@ exports.login = (req, res, next) => {
 };
 
 // we make a function to update an user
-exports.updateUser = (req, res, next) => {
+exports.updateUser = async (req, res, next) => {
+	User.findByPk(req.auth.idUser)
+		.then(user => {
+			const update = {};
+			if (req.body.password) {
+				// Hashing the password
+				const hash = bcrypt.hash(req.body.password, 10);
+				//changing the password
+				update.password = hash;
+			}
+			// Making the email change
+			if (req.body.email) {
+				if (!emailValidator(req.body.email)) {
+					return res.status(400).json({ error: "invalid email" });
+				}
+				// changing the  email
+				update.email = encryptEmail(req.body.email);
+			}
+			// if user not found, send error message
+			if (!user) {
+				return res.status(404).json({ error: "User not found !" });
+			}
+			// else, sending the confirmation message and update the user's infos
+			res
+				.status(201)
+				.json(
+					{ message: "user updated", data: user },
+					hateoasLinks(req, user.id)
+				);
+		})
+		.catch(error => res.status(400).json({ error }));
+};
+
+exports.deleteUser = async (req, res) => {
 	User.findByPk(req.auth.idUser)
 	.then(user => {
-		console.log(user)
-		// si je renseigne un password alors je le hash et je le met dans req.body.password
-		// si je renseigne un email alors je l'encrypt et je le met dans req.body.email
-		// si j'ai un avatar alors je met son url dans req.body.url
-		// si j'avais deja un avatar et que j'en met un nouveau, je l'unlink pour mettre le nouveau
-		// faire l'update avec le req.body et je renvoie mon nouveau user avec les hateoas
-	})
-}
+		if (user == req.auth.idUser)
+			user
+				.destroy({
+					where: {
+						id: req.auth.idUser,
+					},
+				})
+				.then(() =>
+					res.status(200).json({
+						message: "User has been deleted",
+					})
+				)
+				.catch(error => res.status(501).json(error));
+	});
+};
 
-// deleteUser
-// readUser
-// exportData
-// reportUser
+exports.readUser = (req, res) => {
+	User.findByPk(req.auth.idUser)
+	.then(user => {
+		if (!user) {
+			return res.status(404).json({ error: "User not found!" });
+		}
+		user.email = decryptEmail(user.email);
+			// send user infos as json
+			res.status(200).json(user, hateoasLinks(req, user.id));
+		})
+		.catch(error => {
+			res.status(404).send(console.log(error));
+		});
+};
+
+exports.exportUser = (req, res) => {
+	User.findByPk(req.auth.idUser)
+	.then (user => {
+		if (!user) {
+			return res.status(404).json({ error: "User not found !" });
+		}
+		user.email = decryptEmail(user.email);
+		// stringify user infos as txt file
+		const string = user.toString();
+
+		res.attachment("data.txt");
+		res.type("txt");
+		// send text file to user
+		return res.status(200).send(string);
+	});
+};
+
+// exports.reportUser = (req, res) => {
+
+// }
+
+
 // readUserByUserName
 
-// include 
+// include
 
 // HATEOAS Links
 
@@ -184,4 +252,3 @@ function hateoasLinks(req, id) {
 		},
 	];
 }
-
