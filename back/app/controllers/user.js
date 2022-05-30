@@ -110,7 +110,7 @@ exports.login = (req, res, next) => {
 
 // we make a function to update an user
 exports.updateUser = async (req, res, next) => {
-	User.findByPk(req.auth.idUser)
+	User.findOneAndUpdate({ id :req.auth.idUser})
 		.then(user => {
 			const update = {};
 			if (req.body.password) {
@@ -142,8 +142,8 @@ exports.updateUser = async (req, res, next) => {
 		.catch(error => res.status(400).json({ error }));
 };
 
-exports.deleteUser = async (req, res) => {
-	User.findByPk(req.auth.idUser)
+exports.deleteUser = (req, res) => {
+	User.findByPk({ email :req.auth.idUser})
 	.then(user => {
 		if (user == req.auth.idUser)
 			user
@@ -162,7 +162,7 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.readUser = (req, res) => {
-	User.findByPk(req.auth.idUser)
+	User.findByPk({ email :req.auth.idUser})
 	.then(user => {
 		if (!user) {
 			return res.status(404).json({ error: "User not found!" });
@@ -177,7 +177,7 @@ exports.readUser = (req, res) => {
 };
 
 exports.exportUser = (req, res) => {
-	User.findByPk(req.auth.idUser)
+	User.findByPk({ email :req.auth.idUser})
 	.then (user => {
 		if (!user) {
 			return res.status(404).json({ error: "User not found !" });
