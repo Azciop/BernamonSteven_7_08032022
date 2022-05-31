@@ -96,7 +96,7 @@ exports.login = (req, res, next) => {
 						{
 							// if passwords matches, create random secret token for a duration of 24h, and log in
 							idUser: user.id,
-							token: jwt.sign({ idUser: user.id }, "RANDOM_TOKEN_SECRET", {
+							token: jwt.sign({ idUser: user.id }, process.env.RANDOM_TOKEN_SECRET, {
 								expiresIn: "24h",
 							}),
 						},
@@ -110,14 +110,13 @@ exports.login = (req, res, next) => {
 
 // we make a function to update an user
 exports.updateUser = async (req, res, next) => {
-	User.findOneAndUpdate({ id :req.auth.idUser})
-		.then(user => {
-			const update = {};
+	User.findByPk( req.auth.idUser)
+		.then( async (user) => {
 			if (req.body.password) {
 				// Hashing the password
-				const hash = bcrypt.hash(req.body.password, 10);
+				const hash = await bcrypt.hash(req.body.password, 10);
 				//changing the password
-				update.password = hash;
+				req.body.password = hash;
 			}
 			// Making the email change
 			if (req.body.email) {
@@ -125,27 +124,33 @@ exports.updateUser = async (req, res, next) => {
 					return res.status(400).json({ error: "invalid email" });
 				}
 				// changing the  email
-				update.email = encryptEmail(req.body.email);
+				req.body.email = encryptEmail(req.body.email);
 			}
 			// if user not found, send error message
 			if (!user) {
 				return res.status(404).json({ error: "User not found !" });
 			}
 			// else, sending the confirmation message and update the user's infos
-			res
-				.status(201)
+			User.update(req.body, {where : {id : user.id}, plain:true, returning: true})
+			.then(async(newUser) => { 
+				await user.reload()
+				user.email = decryptEmail(user.email)
+				res
+				.status(200)
 				.json(
-					{ message: "user updated", data: user },
-					hateoasLinks(req, user.id)
+					 user ,
+					hateoasLinks(req, newUser.id)
 				);
+			})
+			.catch()
 		})
-		.catch(error => res.status(400).json({ error }));
+		.catch(error => console.log(error));
 };
 
 exports.deleteUser = (req, res) => {
-	User.findByPk({ email :req.auth.idUser})
+	User.findByPk(req.auth.idUser)
 	.then(user => {
-		if (user == req.auth.idUser)
+		// if (req.body.idUser == req.auth.idUser)
 			user
 				.destroy({
 					where: {
@@ -153,16 +158,13 @@ exports.deleteUser = (req, res) => {
 					},
 				})
 				.then(() =>
-					res.status(200).json({
-						message: "User has been deleted",
-					})
-				)
+					res.status(204).send())
 				.catch(error => res.status(501).json(error));
-	});
+			})
 };
 
 exports.readUser = (req, res) => {
-	User.findByPk({ email :req.auth.idUser})
+	User.findByPk(req.auth.idUser)
 	.then(user => {
 		if (!user) {
 			return res.status(404).json({ error: "User not found!" });
@@ -177,7 +179,7 @@ exports.readUser = (req, res) => {
 };
 
 exports.exportUser = (req, res) => {
-	User.findByPk({ email :req.auth.idUser})
+	User.findByPk(req.auth.idUser)
 	.then (user => {
 		if (!user) {
 			return res.status(404).json({ error: "User not found !" });
@@ -185,7 +187,6 @@ exports.exportUser = (req, res) => {
 		user.email = decryptEmail(user.email);
 		// stringify user infos as txt file
 		const string = user.toString();
-
 		res.attachment("data.txt");
 		res.type("txt");
 		// send text file to user
@@ -193,14 +194,6 @@ exports.exportUser = (req, res) => {
 	});
 };
 
-// exports.reportUser = (req, res) => {
-
-// }
-
-
-// readUserByUserName
-
-// include
 
 // HATEOAS Links
 

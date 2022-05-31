@@ -16,7 +16,7 @@ router.post("/login", userCtrl.login);
 // // we make our routes to read and export an user data (RGPD rules)
  router.get("/read", auth, userCtrl.readUser);
  router.get("/export", auth, userCtrl.exportUser);
-
+ 
 // // we make our route tu update user's info
  router.put("/", auth, multer, userCtrl.updateUser);
 
